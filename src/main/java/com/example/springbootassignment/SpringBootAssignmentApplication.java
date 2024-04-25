@@ -3,9 +3,9 @@ package com.example.springbootassignment;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @SpringBootApplication
 @Controller
@@ -17,11 +17,11 @@ public class SpringBootAssignmentApplication {
     }
 
     @GetMapping("/calculate")
-    @ResponseBody
     public String calculate(
             @RequestParam(name = "a") double a,
             @RequestParam(name = "b") double b,
-            @RequestParam(name = "op") String operator) {
+            @RequestParam(name = "op") String operator,
+            Model model) {
         double result;
         switch (operator) {
             case "add":
@@ -37,9 +37,14 @@ public class SpringBootAssignmentApplication {
                 result = a / b;
                 break;
             default:
-                return "Invalid operator";
+                model.addAttribute("error", "Invalid operator");
+                return "error";
         }
-        return "Result: " + result;
+        model.addAttribute("result", result);
+        return "result";
     }
+
+
+
 
 }
